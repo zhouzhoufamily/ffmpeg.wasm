@@ -27,6 +27,7 @@
 #include "libavutil/ffversion.h"
 
 #include <string.h>
+#include <emscripten.h>
 
 #include "libavformat/avformat.h"
 #include "libavformat/version.h"
@@ -4020,8 +4021,18 @@ static inline int check_section_show_entries(int section_id)
             do_show_##varname = 1;                                      \
     } while (0)
 
+void init_globals()
+{
+    input_filename = NULL;
+    print_input_filename = NULL;
+    AVInputFormat *iformat = NULL;
+    output_filename = NULL;
+}
+
 int ffprobe(int argc, char **argv)
 {
+    init_globals();
+    
     const Writer *w;
     WriterContext *wctx;
     char *buf;
